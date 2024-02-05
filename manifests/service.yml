@@ -1,10 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: app1nginxaks
+  name: aspnet-api
+  namespace: sample
+  labels: {}
 spec:
-    type: LoadBalancer
-    ports:
-    - port: 80 
-    selector:
-        app: app1nginxaks
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: aspnet-api
