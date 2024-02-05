@@ -1,19 +1,32 @@
-apiVersion : apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app1nginxaks 
+  name: aspnet-api
+  namespace: sample
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app1nginxaks
+      app: aspnet-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
   template:
     metadata:
       labels:
-        app: app1nginxaks 
+        app: aspnet-api
     spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      serviceAccountName: default
       containers:
-        - name: app1nginxaks 
+        - name: aspnet-api
           image: nginx
+          imagePullPolicy: Always
           ports:
-          - containerPort: 80
+            - name: http
+              containerPort: 80
+              protocol: TCP
